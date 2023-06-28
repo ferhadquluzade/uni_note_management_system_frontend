@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-sm-2 d-flex justify-content-around">
+  <a class="navbar-brand" href="#">NMS</a>
+
+  <div class=" flexible-navbar" id="navbarNav">
+    <form class="form d-flex ">
+      <input class="form-control mx-sm-2" type="search" [formControl]="search" placeholder="Search"
+       (input)="onSearchInputChange()" aria-label="Search" />
+
+      <button class="btn btn-outline-primary" (click)="searchNotes()">
+        Search
+      </button>
+    </form>
+  </div>
+</nav>
+
+<div *ngIf="!loading">
+  <div class="row">
+    <div class="col-12">
+      <div class="table table-striped my-5">
+        <div class="table-dark"></div>
+        <div>
+          <div *ngFor="let note of notes; let i = index">
+            <div class="card my-2">
+              <div class="card-content">
+                <div class="d-flex align-items-center ">{{ i + 1 }}</div>
+                <div class="image-container">
+                  <img class="note-cover-image" [src]="note.cover_image" [alt]="note.title" />
+                </div>
+                <div class="note-content">
+                  {{ note.title }}
+                  <br>
+                  <span [ngStyle]="{ color: 'grey' }">{{ note.description }}</span>
+                </div>
+                <div class="note-content-edit">
+                  <button class="note-content-edit-btn note-edit-btn mx-1" (click)="selectNoteToEdit(note)">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button class="note-content-edit-btn note-delete-btn" (click)="onDelete(note)">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="notes.length === 0">
+          <div class="alert alert-info alert-dismissible fade show text-center">
+            No records!
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <app-edit-note *ngIf="showEditNote && editedNote.id" [note]="editedNote" (onUpdateNote)="updateNote()"></app-edit-note>
+  </div>
+  <div>
+    <app-add-note (onAddNote)="addNote($event)"></app-add-note>
+  </div>
+</div>
